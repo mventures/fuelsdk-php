@@ -528,11 +528,13 @@ class ET_Client extends SoapClient
 	 * @param string $request Soap request xml
 	 * @param string $location Url as string
 	 * @param string $saction Soap action name
-	 * @param string $version Future use
-	 * @param integer $one_way Future use
-	 * @return string Soap web service request result
+	 * @param integer $version SOAP version
+	 * @param boolean $one_way Whether no response is expected
+	 * @param string|null $uriParserClass Native SOAP redirect parser; unused by this cURL transport
+	 * @return string|null Soap web service request result
+	 * @throws \SoapFault When the cURL transport fails
 	 */
-	function __doRequest($request, $location, $saction, $version, $one_way = 0)
+	function __doRequest($request, $location, $saction, $version, $one_way = false, $uriParserClass = null): ?string
 	{
 		$doc = new DOMDocument();
 		$doc->loadXML($request);
@@ -577,9 +579,15 @@ class ET_Client extends SoapClient
 
 		$output = curl_exec($ch);
 		$this->lastHTTPCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
+		$error = $output === false ? curl_error($ch) : null;
+		// Releasing the handle also supports PHP 8.5, where curl_close() is deprecated.
+		unset($ch);
 
-		return $output;
+		if ($output === false) {
+			throw new \SoapFault('HTTP', $error);
+		}
+
+		return $one_way ? null : $output;
 	}
 	/**
 	 * Add OAuth token to the header of the soap request
@@ -624,7 +632,7 @@ class ET_Client extends SoapClient
 	public function getAuthToken($tenantKey = null)
 	{
 		$tenantKey ??= $this->tenantKey;
-		return $this->tenantTokens[$tenantKey]['authToken'] ?? null;
+		return $this->tenantTokens[$tenantKey ?? '']['authToken'] ?? null;
 	}
 
 	/**
@@ -635,8 +643,8 @@ class ET_Client extends SoapClient
 	*/
 	function setAuthToken($tenantKey, $authToken, $authTokenExpiration)
 	{
-		$this->tenantTokens[$tenantKey]['authToken'] = $authToken;
-		$this->tenantTokens[$tenantKey]['authTokenExpiration'] = $authTokenExpiration;
+		$this->tenantTokens[$tenantKey ?? '']['authToken'] = $authToken;
+		$this->tenantTokens[$tenantKey ?? '']['authTokenExpiration'] = $authTokenExpiration;
 	}
 
 	/**
@@ -647,7 +655,7 @@ class ET_Client extends SoapClient
 	function getAuthTokenExpiration($tenantKey)
 	{
 		$tenantKey ??= $this->tenantKey;
-    return $this->tenantTokens[$tenantKey]['authTokenExpiration'] ?? null;
+    return $this->tenantTokens[$tenantKey ?? '']['authTokenExpiration'] ?? null;
 	}
 
 	/**
@@ -658,7 +666,7 @@ class ET_Client extends SoapClient
 	function getInternalAuthToken($tenantKey)
 	{
     $tenantKey ??= $this->tenantKey;
-    return $this->tenantTokens[$tenantKey]['internalAuthToken'] ?? null;
+    return $this->tenantTokens[$tenantKey ?? '']['internalAuthToken'] ?? null;
 	}
 
 	/**
@@ -668,7 +676,7 @@ class ET_Client extends SoapClient
 	*/
 	function setInternalAuthToken($tenantKey, $internalAuthToken)
   {
-		$this->tenantTokens[$tenantKey]['internalAuthToken'] = $internalAuthToken;
+		$this->tenantTokens[$tenantKey ?? '']['internalAuthToken'] = $internalAuthToken;
 	}
 
 	/**
@@ -678,7 +686,7 @@ class ET_Client extends SoapClient
 	*/
 	function setRefreshToken($tenantKey, $refreshToken)
 	{
-		$this->tenantTokens[$tenantKey]['refreshToken'] = $refreshToken;
+		$this->tenantTokens[$tenantKey ?? '']['refreshToken'] = $refreshToken;
 	}
 
 	/**
@@ -690,7 +698,7 @@ class ET_Client extends SoapClient
 	public function getRefreshToken($tenantKey)
 	{
     $tenantKey ??= $this->tenantKey;
-		return $this->tenantTokens[$tenantKey]['refreshToken'] ?? null;
+		return $this->tenantTokens[$tenantKey ?? '']['refreshToken'] ?? null;
 	}
 
 	/**
