@@ -11,7 +11,7 @@ final class TriggeredSendSummaryTest extends TestCase
 {
     private $myclient;
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client(true);
     }

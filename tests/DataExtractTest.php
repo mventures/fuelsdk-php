@@ -15,7 +15,7 @@ final class DataExtractTest extends TestCase
 	private $filename = "php_extract.csv";
 	private $DECustKey = "017dce26-b61f-43c2-bb15-0e46de82d177";    
     
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client();
 //        $this->extractmap = array();

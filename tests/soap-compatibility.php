@@ -13,9 +13,6 @@ require __DIR__ . '/../src/ET_Util.php';
 $reflection = new ReflectionClass(FuelSdk\ET_Client::class);
 $client = $reflection->newInstanceWithoutConstructor();
 $oauth = $reflection->getProperty('useOAuth2Authentication');
-if (PHP_VERSION_ID < 80100) {
-    $oauth->setAccessible(true);
-}
 $oauth->setValue($client, true);
 $expiration = new DateTime('+1 hour');
 foreach ([null, '', 'other-tenant'] as $tenant) {

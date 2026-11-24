@@ -13,7 +13,7 @@ final class ProfileAttributeTest extends TestCase
     private $myclient;
 	private $NameOfAttribute;
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client(true);
         $this->NameOfAttribute = "PHPSDKTestAttribute";//.uniqid();        

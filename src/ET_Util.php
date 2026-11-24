@@ -312,13 +312,13 @@ class ET_Util
     }
 
     /**
-     * Returns true if the sslverifypeer config value is explicitly set to true, otherwise false.
+     * Returns false only if the sslverifypeer config value is explicitly set to false, otherwise true.
      * @param $configValue The config value for the sslverifypeer config key
      * @return bool
      */
     public static function shouldVerifySslPeer($configValue)
     {
-        return $configValue === true ? true : false;
+        return $configValue !== false;
     }
 }
 ?>

@@ -40,17 +40,13 @@ class ET_Asset extends ET_CUDSupportRest
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_setopt($ch, CURLOPT_POST,1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-
-		// Disable VerifyPeer for SSL
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, ET_Util::shouldVerifySslPeer($this->authStub->sslVerifyPeer));
 		
 		$outputJSON = curl_exec($ch);
-		//curl_close ($ch);
-		
-		$responseObject = new stdClass(); 
+
+		$responseObject = new stdClass();
 		$responseObject->body = $outputJSON;
 		$responseObject->httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close ($ch);	
 		
 		return $responseObject;
 	}

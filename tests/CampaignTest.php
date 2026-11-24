@@ -12,7 +12,7 @@ final class CampaignTest extends TestCase
 {
     private $client;
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->client = new ET_Client(true);
     }

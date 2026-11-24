@@ -15,7 +15,7 @@ final class OrganizationTest extends TestCase
     private $NameOfTestOrganization;
     private $CustomerKeyOfTestOrganization;
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client(true);
         $this->CustomerKeyofExistingOrganization = '65941725-F407-49C4-A64A-F6C8E38A01B1';

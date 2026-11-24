@@ -15,7 +15,7 @@ final class ImportTest extends TestCase
 	private $SendableDataExtensionCustomerKey;
 	private $TaskResultID;
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client(true);
         $this->NewImportName = "PHPSDKImport";
@@ -87,7 +87,7 @@ final class ImportTest extends TestCase
         
         $this->assertTrue($startResponse->status);
         $this->assertEquals($startResponse->results[0]->Task->StatusMessage, "OK");
-        $this->assertContains("ImportDefinition performed", $startResponse->results[0]->StatusMessage);        
+        $this->assertStringContainsString("ImportDefinition performed", $startResponse->results[0]->StatusMessage);        
 
         return $startResponse->results[0]->Task->ID;    
     }
