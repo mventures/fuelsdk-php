@@ -3,7 +3,8 @@
 namespace FuelSdk;
 
 use \RobRichards\WsePhp\WSSESoap;
-use \Firebase\JWT;
+use \Firebase\JWT\JWT;
+use \Firebase\JWT\Key;
 
 use \Datetime;
 use \SoapClient;
@@ -262,7 +263,7 @@ class ET_Client extends SoapClient
 			if (!property_exists($this,'appsignature') || is_null($this->appsignature)){
 				throw new Exception('Unable to utilize JWT for SSO without appsignature: Must be provided in config file or passed when instantiating ET_Client');
 			}
-			$decodedJWT = JWT::decode($params['jwt'], $this->appsignature);
+			$decodedJWT = JWT::decode($params['jwt'], new Key($this->appsignature, 'HS256'));
 			$dv = new DateInterval('PT'.$decodedJWT->request->user->expiresIn.'S');
 			$newexpTime = new DateTime();
 			$this->setAuthToken($this->tenantKey, $decodedJWT->request->user->oauthToken, $newexpTime->add($dv));
