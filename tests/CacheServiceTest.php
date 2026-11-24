@@ -19,7 +19,7 @@ namespace FuelSdk\Test {
      /**
      * @covers \FuelSdk\ET_CacheService
      */
-    final class CacheServiceTest extends \PHPUnit_Framework_TestCase
+    final class CacheServiceTest extends \PHPUnit\Framework\TestCase
     {
         public static $now;
         private $currentTime;
@@ -31,7 +31,7 @@ namespace FuelSdk\Test {
         const CLIENT_SECRET_2 = 'secret2';
         const SOAP_URL_2 = 'http://soap2.asmx';
 
-        public function setup()
+        protected function setUp(): void
         {
             $this->currentTime = time();
             CacheServiceTest::$now = $this->currentTime;
@@ -142,7 +142,7 @@ namespace FuelSdk\Test {
             $this->assertEquals(CacheServiceTest::$now + self::CACHE_TIME_IN_SECONDS, $cachedValue2->expires);
         }
 
-        public function tearDown()
+        protected function tearDown(): void
         {
             CacheServiceTest::$now = null;
         }

@@ -10,6 +10,16 @@ namespace FuelSdk;
 class ET_GetSupport extends ET_BaseObject
 {
     /**
+    * @var      string|null      Folder property e.g. "Category", "CategoryID", etc.
+    */
+	public $folderProperty;
+
+    /**
+    * @var      string|null      Folder Media Type e.g. "dataextension", "triggered_send", etc.
+    */
+	public $folderMediaType;
+
+    /**
     * @return ET_Get     Object of type ET_Get which contains http status code, response, etc from the GET SOAP service 
     */
 	public function get()

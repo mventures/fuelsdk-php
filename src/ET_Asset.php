@@ -45,12 +45,10 @@ class ET_Asset extends ET_CUDSupportRest
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		
 		$outputJSON = curl_exec($ch);
-		//curl_close ($ch);
-		
-		$responseObject = new stdClass(); 
+
+		$responseObject = new stdClass();
 		$responseObject->body = $outputJSON;
 		$responseObject->httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close ($ch);	
 		
 		return $responseObject;
 	}

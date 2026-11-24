@@ -16,7 +16,7 @@ final class ListSubscriberTest extends TestCase
 	private $NewListName = "PHPSDKListSubscriber";
 	private $SubscriberTestEmail = "PHPSDKListSubscriber@bh.exacttarget.com";
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client(true);
     }

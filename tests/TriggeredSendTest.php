@@ -17,7 +17,7 @@ final class TriggeredSendTest extends TestCase
     private $TSNameForCreateThenDelete;
     private $TSNameForDelete;
 
-    function __construct()
+    protected function setUp(): void
     {
         $this->myclient = new ET_Client(true);
         $this->NameOfTestTS = "TEXTEXT";
